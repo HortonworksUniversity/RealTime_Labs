@@ -12,7 +12,7 @@ import org.apache.storm.tuple.Values;
 public class SplitSentenceBolt extends BaseBasicBolt {
 
     public void execute(Tuple tuple, BasicOutputCollector basicOutputCollector) {
-        String[] words = StringUtils.split(tuple.getStringByField("sentence"));
+        String[] words = StringUtils.split(tuple.getString(0));
         for( String word : words ) {
             System.out.println("\n*** Split Sentence Bolt *** " + word + " ***\n");
             basicOutputCollector.emit(new Values(word));
