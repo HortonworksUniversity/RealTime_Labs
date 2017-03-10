@@ -14,6 +14,8 @@ import java.util.Random;
 
 public class RandomSentenceSpout extends BaseRichSpout {
 
+    public static final String SPOUT_NAME = "generator";
+    public static final String EMIT_SENTENCE = "sentence";
 
     private static final String[] SENTENCES =
             new String[] { "the cow jumped over the moon",
@@ -38,7 +40,8 @@ public class RandomSentenceSpout extends BaseRichSpout {
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("sentence"));
+        outputFieldsDeclarer.declare(new Fields(EMIT_SENTENCE));
+
     }
 
 }

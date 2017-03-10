@@ -1,47 +1,37 @@
 package wordcount;
 
 import org.apache.storm.Config;
-import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
+import org.apache.storm.generated.AlreadyAliveException;
+import org.apache.storm.generated.AuthorizationException;
+import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 public class RandomWordCountTopology {
 
-    public static final String TOPOLOGY_NAME = "word-count";
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
-        builder.setSpout(RandomSentenceSpout.SPOUT_NAME,
-                new RandomSentenceSpout(),1);
+        builder.setSpout("generator",
+                new RandomSentenceSpout(), 1);
 
-        builder.setBolt(SplitSentenceBolt.BOLT_NAME,
+        builder.setBolt("splitter",
                 new SplitSentenceBolt(), 2)
-                .shuffleGrouping(RandomSentenceSpout.SPOUT_NAME);
+                .shuffleGrouping("generator");
 
-        builder.setBolt(WordCountBolt.BOLT_NAME,
+        builder.setBolt("counter",
                 new WordCountBolt(), 4)
-                .fieldsGrouping(SplitSentenceBolt.BOLT_NAME,
-                        new Fields(SplitSentenceBolt.EMIT_WORD));
+                .fieldsGrouping("splitter", new Fields("word"));
+
 
         Config conf = new Config();
         conf.setDebug(true);
         conf.setNumWorkers(3);
 
-        /*
-        LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
-        */
-
-
-        StormSubmitter.submitTopologyWithProgressBar(TOPOLOGY_NAME,
-                conf, builder.createTopology());
-
+        StormSubmitter.submitTopologyWithProgressBar(
+                "word-count", conf,
+                builder.createTopology());
 
     }
 }
