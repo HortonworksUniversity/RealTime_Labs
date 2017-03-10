@@ -2,6 +2,7 @@ package wordcount;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
@@ -32,15 +33,15 @@ public class RandomWordCountTopology {
         conf.setDebug(true);
         conf.setNumWorkers(3);
 
-
+        /*
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
+        */
 
 
-    /*
         StormSubmitter.submitTopologyWithProgressBar(TOPOLOGY_NAME,
                 conf, builder.createTopology());
-    */
+
 
     }
 }

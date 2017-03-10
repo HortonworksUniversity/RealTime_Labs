@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>hwu.realtime</groupId>
-    <artifactId>word-count</artifactId>
+    <artifactId>simple-storm</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <storm.version>1.0.1.2.5.0.0-1245</storm.version>
-        <kafka.version>0.10.1.0</kafka.version>
-        <zookeeper.version>3.4.6</zookeeper.version>
+        <storm.version>1.0.1.2.5.3.0-37</storm.version>
+        <kafka.version>0.10.0.2.5.3.0-37</kafka.version>  <!-- was 0.10.1.0 -->
+        <zookeeper.version>3.4.6.2.5.3.0-37</zookeeper.version>  <!-- was 3.4.6 -->
         <log4j2.version>2.1</log4j2.version>
     </properties>
 
@@ -30,23 +30,25 @@
     <dependencies>
 
         <!-- Logging dependencies needed for local mode -->
-        <!--
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
             <version>1.1.3</version>
         </dependency>
-        -->
+
         <!-- End of Logging -->
 
 
@@ -54,9 +56,9 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-core</artifactId>
             <version>${storm.version}</version>
-            <scope>provided</scope> <!--   avail in cluster mode, but tag needs to be commented out for local -->
+            <!-- <scope>provided</scope>  avail in cluster mode, but tag needs to be commented out for local -->
             <!-- exclusions needed for running in local mode -->
-            <!--
+
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -87,7 +89,7 @@
                     <artifactId>log4j-slf4j-impl</artifactId>
                 </exclusion>
             </exclusions>
-            -->
+
         </dependency>
 
         <dependency>
@@ -108,6 +110,7 @@
             <version>${storm.version}</version>
         </dependency>
 
+
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.11</artifactId>
@@ -120,6 +123,19 @@
                 <exclusion>
                     <groupId>org.apache.zookeeper</groupId>
                     <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- see https://community.hortonworks.com/questions/61133/issue-with-storm-kafka-spout.html -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>2.10.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

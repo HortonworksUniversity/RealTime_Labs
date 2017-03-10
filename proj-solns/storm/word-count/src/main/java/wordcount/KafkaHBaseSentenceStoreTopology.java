@@ -15,29 +15,39 @@ import java.util.Map;
 import java.util.UUID;
 
 
-public class RandomHBaseSentenceStoreTopology {
+public class KafkaHBaseSentenceStoreTopology {
 
-    public static final String TOPOLOGY_NAME = "kafka-word-count";
+    public static final String TOPOLOGY_NAME = "kafka-hbase-simple";
     private static final String KAFKA_TOPIC_NAME = "lestertester";
-    private static final String KAFKA_HOST_NAME = "kafka";
+    private static final String KAFKA_ZK_QUORUM = "zk1:2181,zk2:2181,zk3:2181";
 
     public static void main(String[] args) throws Exception {
 
+        BrokerHosts hosts = new ZkHosts(KAFKA_ZK_QUORUM);
+        SpoutConfig sc = new SpoutConfig(hosts,
+                KAFKA_TOPIC_NAME, "/" + KAFKA_TOPIC_NAME,
+                UUID.randomUUID().toString());
+        sc.scheme = new SchemeAsMultiScheme(new StringScheme());
+        KafkaSpout spout = new KafkaSpout(sc);
+
         TopologyBuilder builder = new TopologyBuilder();
 
-        builder.setSpout(RandomSentenceIDSpout.SPOUT_NAME,
-                new RandomSentenceIDSpout(),1);
+        builder.setSpout("kafka_spout", spout, 1);
+
+        builder.setBolt(SimpleIDBolt.BOLT_NAME,
+                new SimpleIDBolt(), 1)
+                .shuffleGrouping("kafka_spout");
 
         SimpleHBaseMapper mapper = new SimpleHBaseMapper()
-                .withRowKeyField(RandomSentenceIDSpout.EMIT_BOGUS_KEY)
-                .withColumnFields(new Fields(RandomSentenceIDSpout.EMIT_SENTENCE))
+                .withRowKeyField(SimpleIDBolt.EMIT_BOGUS_KEY)
+                .withColumnFields(new Fields(SimpleIDBolt.EMIT_SENTENCE))
                 .withColumnFamily("cf");
 
         HBaseBolt hbase = new HBaseBolt("bogus_table", mapper)
                 .withConfigKey("hbase.config");
 
         builder.setBolt("hbase-bolt", hbase, 1)
-                .shuffleGrouping(RandomSentenceIDSpout.SPOUT_NAME);
+                .shuffleGrouping(SimpleIDBolt.BOLT_NAME);
 
         Config conf = new Config();
         conf.setDebug(true);
@@ -53,15 +63,14 @@ public class RandomHBaseSentenceStoreTopology {
 
 
 
-/*
+
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology(TOPOLOGY_NAME, conf, builder.createTopology());
-*/
 
-
+/*
         StormSubmitter.submitTopologyWithProgressBar(TOPOLOGY_NAME,
                 conf, builder.createTopology());
-
+*/
 
 
     }

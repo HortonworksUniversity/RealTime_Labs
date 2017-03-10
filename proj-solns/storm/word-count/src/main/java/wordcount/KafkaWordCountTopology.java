@@ -2,6 +2,7 @@ package wordcount;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
 import org.apache.storm.kafka.*;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
@@ -13,12 +14,12 @@ import java.util.UUID;
 public class KafkaWordCountTopology {
 
     public static final String TOPOLOGY_NAME = "kafka-word-count";
-    private static final String KAFKA_TOPIC_NAME = "test2";
-    private static final String KAFKA_HOST_NAME = "sandbox.hortonworks.com";
+    private static final String KAFKA_TOPIC_NAME = "lestertester";
+    private static final String KAFKA_HOST_NAME = "zk1:2181,zk2:2181,zk3:2181";
 
     public static void main(String[] args) throws Exception {
 
-        BrokerHosts hosts = new ZkHosts(KAFKA_HOST_NAME + ":2181");
+        BrokerHosts hosts = new ZkHosts(KAFKA_HOST_NAME);
         SpoutConfig sc = new SpoutConfig(hosts,
                 KAFKA_TOPIC_NAME, "/" + KAFKA_TOPIC_NAME,
                 UUID.randomUUID().toString());
@@ -38,13 +39,13 @@ public class KafkaWordCountTopology {
                 .shuffleGrouping(SimpleBolt.BOLT_NAME);
 
         builder.setBolt(WordCountBolt.BOLT_NAME,
-                new WordCountBolt(), 4)
+                new WordCountBolt(), 2)
                 .fieldsGrouping(SplitSentenceBolt.BOLT_NAME,
                         new Fields(SplitSentenceBolt.EMIT_WORD));
 
         Config conf = new Config();
         conf.setDebug(true);
-        conf.setNumWorkers(3);
+        conf.setNumWorkers(1);
 
 
         LocalCluster cluster = new LocalCluster();
