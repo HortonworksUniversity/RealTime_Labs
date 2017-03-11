@@ -2,6 +2,7 @@ package workshop;
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
+import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
@@ -62,15 +63,15 @@ public class LogAnalyzerTopology {
         mapHbase.put("hbase.rootdir", "hdfs://FedExNS/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
-/*
+
         StormSubmitter.submitTopologyWithProgressBar(
                 "log-analyzer", conf,
                 builder.createTopology());
-*/
 
+        /*
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("log-analyzer-local",
                 conf, builder.createTopology());
-
+        */
     }
 }
