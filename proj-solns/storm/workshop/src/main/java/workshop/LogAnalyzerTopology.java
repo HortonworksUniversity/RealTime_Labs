@@ -65,7 +65,7 @@ public class LogAnalyzerTopology {
 
 
         StormSubmitter.submitTopologyWithProgressBar(
-                "log-analyzer", conf,
+                "student20-log-analyzer", conf,
                 builder.createTopology());
 
         /*
