@@ -9,12 +9,16 @@ import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.hbase.bolt.HBaseBolt;
 import org.apache.storm.hbase.bolt.mapper.SimpleHBaseMapper;
 import org.apache.storm.kafka.*;
+import org.apache.storm.kafka.bolt.KafkaBolt;
+import org.apache.storm.kafka.bolt.mapper.FieldNameBasedTupleToKafkaMapper;
+import org.apache.storm.kafka.bolt.selector.DefaultTopicSelector;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.UUID;
 
 public class LogAnalyzerTopology {
@@ -54,6 +58,7 @@ public class LogAnalyzerTopology {
         builder.setBolt("hbase-bolt", hbase, 1)
                 .shuffleGrouping("message-filterer");
 
+
         Config conf = new Config();
         conf.setDebug(true);
         conf.setNumWorkers(1);
@@ -63,9 +68,28 @@ public class LogAnalyzerTopology {
         mapHbase.put("hbase.rootdir", "hdfs://FedExNS/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
+        builder.setBolt("message-reassembler",
+                new MessageReassemblerBolt(), 1)
+                .shuffleGrouping("message-filterer");
+
+        //set producer properties.
+        Properties props = new Properties();
+        props.put("bootstrap.servers", "broker1:6667,broker2:6667,broker3:6667");
+        props.put("acks", "1");
+        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+        //"ip-address", "delimited-record"));
+
+        KafkaBolt kafkaBolt = new KafkaBolt()
+                .withProducerProperties(props)
+                .withTopicSelector(new DefaultTopicSelector("s20bolt"))
+                .withTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper(
+                        "ip-address", "delimited-record"));
+        builder.setBolt("kafka-bolt", kafkaBolt, 1).shuffleGrouping("message-reassembler");
 
         StormSubmitter.submitTopologyWithProgressBar(
-                "student20-log-analyzer", conf,
+                "s20-log-analyzer", conf,
                 builder.createTopology());
 
         /*
@@ -73,5 +97,6 @@ public class LogAnalyzerTopology {
         cluster.submitTopology("log-analyzer-local",
                 conf, builder.createTopology());
         */
+        
     }
 }
