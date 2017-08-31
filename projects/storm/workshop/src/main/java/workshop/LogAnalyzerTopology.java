@@ -28,7 +28,7 @@ public class LogAnalyzerTopology {
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "hdfs://FedExNS/apps/hbase/data");
+        mapHbase.put("hbase.rootdir", "hdfs://sandbox.hortonworks.com:8020/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
 

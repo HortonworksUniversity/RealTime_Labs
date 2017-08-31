@@ -15,8 +15,8 @@ if __name__ == "__main__":
     print "Printing ",sys.argv[1]," messages per second.  Press control-c to stop"
     sleep(1)
     topic = sys.argv[2]
-    toKafka = "/usr/hdp/current/kafka-broker/bin/kafka-console-producer.sh"
-    brokers = "broker1:6667,broker2:6667,broker3:6667"
+    toKafka = "/root/kafka/bin/kafka-console-producer.sh"
+    brokers = "sandbox.hortonworks.com:6667"
     z = toKafka + " --broker-list " + brokers + " --topic " + topic
     process = pexpect.spawnu(z)
     data = list(open('logData.txt'))

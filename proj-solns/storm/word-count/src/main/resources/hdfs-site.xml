@@ -16,11 +16,6 @@
     </property>
     
     <property>
-      <name>dfs.client.failover.proxy.provider.FedExNS</name>
-      <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
-    </property>
-    
-    <property>
       <name>dfs.client.read.shortcircuit</name>
       <value>true</value>
     </property>
@@ -68,7 +63,7 @@
     
     <property>
       <name>dfs.datanode.du.reserved</name>
-      <value>10735632896</value>
+      <value>1073741824</value>
     </property>
     
     <property>
@@ -108,18 +103,8 @@
     </property>
     
     <property>
-      <name>dfs.ha.automatic-failover.enabled</name>
-      <value>true</value>
-    </property>
-    
-    <property>
-      <name>dfs.ha.fencing.methods</name>
-      <value>shell(/bin/true)</value>
-    </property>
-    
-    <property>
-      <name>dfs.ha.namenodes.FedExNS</name>
-      <value>nn1,nn2</value>
+      <name>dfs.encryption.key.provider.uri</name>
+      <value></value>
     </property>
     
     <property>
@@ -143,13 +128,8 @@
     </property>
     
     <property>
-      <name>dfs.internal.nameservices</name>
-      <value>FedExNS</value>
-    </property>
-    
-    <property>
       <name>dfs.journalnode.edits.dir</name>
-      <value>/hadoop/hdfs/journal</value>
+      <value>/hadoop/hdfs/journalnode</value>
     </property>
     
     <property>
@@ -209,27 +189,23 @@
     
     <property>
       <name>dfs.namenode.handler.count</name>
-      <value>200</value>
+      <value>25</value>
     </property>
     
     <property>
-      <name>dfs.namenode.http-address.FedExNS.nn1</name>
-      <value>ip-172-30-0-65.us-west-2.compute.internal:50070</value>
+      <name>dfs.namenode.http-address</name>
+      <value>sandbox.hortonworks.com:50070</value>
+      <final>true</final>
     </property>
     
     <property>
-      <name>dfs.namenode.http-address.FedExNS.nn2</name>
-      <value>ip-172-30-0-132.us-west-2.compute.internal:50070</value>
+      <name>dfs.namenode.https-address</name>
+      <value>sandbox.hortonworks.com:50470</value>
     </property>
     
     <property>
-      <name>dfs.namenode.https-address.FedExNS.nn1</name>
-      <value>ip-172-30-0-65.us-west-2.compute.internal:50470</value>
-    </property>
-    
-    <property>
-      <name>dfs.namenode.https-address.FedExNS.nn2</name>
-      <value>ip-172-30-0-132.us-west-2.compute.internal:50470</value>
+      <name>dfs.namenode.inode.attributes.provider.class</name>
+      <value>org.apache.ranger.authorization.hadoop.RangerHdfsAuthorizer</value>
     </property>
     
     <property>
@@ -244,23 +220,18 @@
     </property>
     
     <property>
-      <name>dfs.namenode.rpc-address.FedExNS.nn1</name>
-      <value>ip-172-30-0-65.us-west-2.compute.internal:8020</value>
-    </property>
-    
-    <property>
-      <name>dfs.namenode.rpc-address.FedExNS.nn2</name>
-      <value>ip-172-30-0-132.us-west-2.compute.internal:8020</value>
+      <name>dfs.namenode.rpc-address</name>
+      <value>sandbox.hortonworks.com:8020</value>
     </property>
     
     <property>
       <name>dfs.namenode.safemode.threshold-pct</name>
-      <value>0.99f</value>
+      <value>1</value>
     </property>
     
     <property>
-      <name>dfs.namenode.shared.edits.dir</name>
-      <value>qjournal://ip-172-30-0-132.us-west-2.compute.internal:8485;ip-172-30-0-65.us-west-2.compute.internal:8485;ip-172-30-0-159.us-west-2.compute.internal:8485/FedExNS</value>
+      <name>dfs.namenode.secondary.http-address</name>
+      <value>sandbox.hortonworks.com:50090</value>
     </property>
     
     <property>
@@ -279,11 +250,6 @@
     </property>
     
     <property>
-      <name>dfs.nameservices</name>
-      <value>FedExNS</value>
-    </property>
-    
-    <property>
       <name>dfs.permissions.enabled</name>
       <value>true</value>
     </property>
@@ -295,7 +261,7 @@
     
     <property>
       <name>dfs.replication</name>
-      <value>3</value>
+      <value>1</value>
     </property>
     
     <property>

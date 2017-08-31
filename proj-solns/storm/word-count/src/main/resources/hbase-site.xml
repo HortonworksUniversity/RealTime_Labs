@@ -6,6 +6,26 @@
     </property>
     
     <property>
+      <name>hbase.backup.enable</name>
+      <value>true</value>
+    </property>
+    
+    <property>
+      <name>hbase.bucketcache.ioengine</name>
+      <value>offheap</value>
+    </property>
+    
+    <property>
+      <name>hbase.bucketcache.percentage.in.combinedcache</name>
+      <value></value>
+    </property>
+    
+    <property>
+      <name>hbase.bucketcache.size</name>
+      <value>1024</value>
+    </property>
+    
+    <property>
       <name>hbase.bulkload.staging.dir</name>
       <value>/apps/hbase/staging</value>
     </property>
@@ -32,12 +52,17 @@
     
     <property>
       <name>hbase.coprocessor.master.classes</name>
-      <value></value>
+      <value>org.apache.ranger.authorization.hbase.RangerAuthorizationCoprocessor</value>
     </property>
     
     <property>
       <name>hbase.coprocessor.region.classes</name>
-      <value>org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint</value>
+      <value>org.apache.hadoop.hbase.security.access.SecureBulkLoadEndpoint,org.apache.ranger.authorization.hbase.RangerAuthorizationCoprocessor</value>
+    </property>
+    
+    <property>
+      <name>hbase.coprocessor.regionserver.classes</name>
+      <value>org.apache.ranger.authorization.hbase.RangerAuthorizationCoprocessor</value>
     </property>
     
     <property>
@@ -106,6 +131,11 @@
     </property>
     
     <property>
+      <name>hbase.master.namespace.init.timeout</name>
+      <value>2400000</value>
+    </property>
+    
+    <property>
       <name>hbase.master.port</name>
       <value>16000</value>
     </property>
@@ -113,6 +143,21 @@
     <property>
       <name>hbase.master.ui.readonly</name>
       <value>false</value>
+    </property>
+    
+    <property>
+      <name>hbase.master.wait.on.regionservers.timeout</name>
+      <value>30000</value>
+    </property>
+    
+    <property>
+      <name>hbase.region.server.rpc.scheduler.factory.class</name>
+      <value></value>
+    </property>
+    
+    <property>
+      <name>hbase.regionserver.executor.openregion.threads</name>
+      <value>20</value>
     </property>
     
     <property>
@@ -142,7 +187,12 @@
     
     <property>
       <name>hbase.rootdir</name>
-      <value>hdfs://FedExNS/apps/hbase/data</value>
+      <value>hdfs://sandbox.hortonworks.com:8020/apps/hbase/data</value>
+    </property>
+    
+    <property>
+      <name>hbase.rpc.controllerfactory.class</name>
+      <value></value>
     </property>
     
     <property>
@@ -162,7 +212,7 @@
     
     <property>
       <name>hbase.security.authorization</name>
-      <value>false</value>
+      <value>true</value>
     </property>
     
     <property>
@@ -182,7 +232,7 @@
     
     <property>
       <name>hbase.zookeeper.quorum</name>
-      <value>ip-172-30-0-132.us-west-2.compute.internal,ip-172-30-0-65.us-west-2.compute.internal,ip-172-30-0-159.us-west-2.compute.internal</value>
+      <value>sandbox.hortonworks.com</value>
     </property>
     
     <property>
@@ -193,6 +243,11 @@
     <property>
       <name>hfile.block.cache.size</name>
       <value>0.4</value>
+    </property>
+    
+    <property>
+      <name>phoenix.functions.allowUserDefinedFunctions</name>
+      <value> </value>
     </property>
     
     <property>

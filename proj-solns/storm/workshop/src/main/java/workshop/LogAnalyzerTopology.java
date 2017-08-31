@@ -26,10 +26,10 @@ public class LogAnalyzerTopology {
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
-        BrokerHosts hosts = new ZkHosts("zk1:2181,zk2:2181,zk3:2181");
+        BrokerHosts hosts = new ZkHosts("sandbox.hortonworks.com:2181");
 
         SpoutConfig sc = new SpoutConfig(hosts,
-                "s20-logs", "/s20-logs",
+                "logs", "/logs",
                 UUID.randomUUID().toString());
         sc.scheme = new SchemeAsMultiScheme(new StringScheme());
 
@@ -52,7 +52,7 @@ public class LogAnalyzerTopology {
                 .withCounterFields(new Fields("total"))
                 .withColumnFamily("event");
 
-        HBaseBolt hbase = new HBaseBolt("s20_incident", mapper)
+        HBaseBolt hbase = new HBaseBolt("incident", mapper)
                 .withConfigKey("hbase.config");
 
         builder.setBolt("hbase-bolt", hbase, 1)
@@ -65,7 +65,7 @@ public class LogAnalyzerTopology {
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "hdfs://FedExNS/apps/hbase/data");
+        mapHbase.put("hbase.rootdir", "hdfs://sandbox.hortonworks.com:8020/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
         builder.setBolt("message-reassembler",
@@ -74,7 +74,7 @@ public class LogAnalyzerTopology {
 
         //set producer properties.
         Properties props = new Properties();
-        props.put("bootstrap.servers", "broker1:6667,broker2:6667,broker3:6667");
+        props.put("bootstrap.servers", "sandbox.hortonworks.com:6667");
         props.put("acks", "1");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
@@ -83,13 +83,13 @@ public class LogAnalyzerTopology {
 
         KafkaBolt kafkaBolt = new KafkaBolt()
                 .withProducerProperties(props)
-                .withTopicSelector(new DefaultTopicSelector("s20bolt"))
+                .withTopicSelector(new DefaultTopicSelector("bolt"))
                 .withTupleToKafkaMapper(new FieldNameBasedTupleToKafkaMapper(
                         "ip-address", "delimited-record"));
         builder.setBolt("kafka-bolt", kafkaBolt, 1).shuffleGrouping("message-reassembler");
 
         StormSubmitter.submitTopologyWithProgressBar(
-                "s20-log-analyzer", conf,
+                "log-analyzer", conf,
                 builder.createTopology());
 
         /*

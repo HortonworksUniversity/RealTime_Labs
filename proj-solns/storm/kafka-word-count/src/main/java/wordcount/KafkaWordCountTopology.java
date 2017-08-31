@@ -17,10 +17,10 @@ public class KafkaWordCountTopology {
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
-        BrokerHosts hosts = new ZkHosts("zk1:2181,zk2:2181,zk3:2181");
+        BrokerHosts hosts = new ZkHosts("sandbox.hortonworks.com:2181");
 
         SpoutConfig sc = new SpoutConfig(hosts,
-                "s20-sentences", "/s20-sentences",
+                "sentences", "/sentences",
                 UUID.randomUUID().toString());
         sc.scheme = new SchemeAsMultiScheme(new StringScheme());
 

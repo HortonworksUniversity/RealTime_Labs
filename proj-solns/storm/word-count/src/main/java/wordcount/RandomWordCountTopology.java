@@ -17,17 +17,17 @@ public class RandomWordCountTopology {
                 new RandomSentenceSpout(), 1);
 
         builder.setBolt("splitter",
-                new SplitSentenceBolt(), 2)
+                new SplitSentenceBolt(), 1)
                 .shuffleGrouping("generator");
 
         builder.setBolt("counter",
-                new WordCountBolt(), 4)
+                new WordCountBolt(), 2)
                 .fieldsGrouping("splitter", new Fields("word"));
 
 
         Config conf = new Config();
         conf.setDebug(true);
-        conf.setNumWorkers(3);
+        conf.setNumWorkers(1);
 
         StormSubmitter.submitTopologyWithProgressBar(
                 "student20-word-count", conf,
