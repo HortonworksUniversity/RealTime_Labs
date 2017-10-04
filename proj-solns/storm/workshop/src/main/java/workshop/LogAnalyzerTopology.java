@@ -88,15 +88,15 @@ public class LogAnalyzerTopology {
                         "ip-address", "delimited-record"));
         builder.setBolt("kafka-bolt", kafkaBolt, 1).shuffleGrouping("message-reassembler");
 
+        /*
         StormSubmitter.submitTopologyWithProgressBar(
                 "log-analyzer", conf,
                 builder.createTopology());
+        */
 
-        /*
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("log-analyzer-local",
                 conf, builder.createTopology());
-        */
-        
+
     }
 }

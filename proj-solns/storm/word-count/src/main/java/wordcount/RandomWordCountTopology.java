@@ -30,7 +30,7 @@ public class RandomWordCountTopology {
         conf.setNumWorkers(1);
 
         StormSubmitter.submitTopologyWithProgressBar(
-                "student20-word-count", conf,
+                "word-count-soln", conf,
                 builder.createTopology());
 
     }

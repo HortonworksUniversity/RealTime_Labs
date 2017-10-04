@@ -29,16 +29,7 @@
 
     <dependencies>
 
-        <!-- see https://martin.atlassian.net/wiki/x/JbXqBQ -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>1.7.21</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Logging dependencies needed for local mode -->
-        <!--
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
@@ -56,7 +47,6 @@
             <artifactId>commons-logging</artifactId>
             <version>1.1.3</version>
         </dependency>
-        -->
         <!-- End of Logging -->
 
 
@@ -64,9 +54,8 @@
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-core</artifactId>
             <version>${storm.version}</version>
-            <scope>provided</scope> <!--  avail in cluster mode, but tag needs to be commented out for local -->
+            <!-- <scope>provided</scope>  avail in cluster mode, but tag needs to be commented out for local -->
             <!-- exclusions needed for running in local mode -->
-            <!--
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -97,7 +86,6 @@
                     <artifactId>log4j-slf4j-impl</artifactId>
                 </exclusion>
             </exclusions>
-            -->
         </dependency>
 
         <dependency>
@@ -111,10 +99,10 @@
             <artifactId>storm-kafka</artifactId>
             <version>${storm.version}</version>
             <exclusions>
-            	<exclusion>
-            		<groupId>org.apache.kafka</groupId>
-            		<artifactId>kafka-clients</artifactId>
-            	</exclusion>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 

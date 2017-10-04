@@ -48,7 +48,7 @@ public class KafkaWordCountTopology {
         */
 
         LocalCluster cluster = new LocalCluster();
-        cluster.submitTopology("word-count-local",
+        cluster.submitTopology("word-count-local-soln",
                 conf, builder.createTopology());
 
     }
