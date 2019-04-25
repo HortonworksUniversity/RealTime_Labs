@@ -22,13 +22,15 @@ public class LogAnalyzerTopology {
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
+        String namenodeServer = "replaceWith-INTERNAL-dns-of-NAMENODESERVER-node";
+
         Config conf = new Config();
         conf.setDebug(true);
         conf.setNumWorkers(1);
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "REPLACE-WITH-VALUE-FROM_hbase-site.xml_CONFIG-FILE");
+        mapHbase.put("hbase.rootdir", "hdfs://" + namenodeServer + ":8020/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
 

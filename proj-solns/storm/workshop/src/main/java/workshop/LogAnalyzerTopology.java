@@ -25,6 +25,8 @@ public class LogAnalyzerTopology {
 
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
+        
+        String namenodeServer = "replaceWith-INTERNAL-dns-of-NAMENODESERVER-node";
 
         String bootstrapServer = "replaceWith-INTERNAL-dns-of-ONE-broker-node";
 
@@ -62,7 +64,7 @@ public class LogAnalyzerTopology {
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "REPLACE-WITH-VALUE-FROM_hbase-site.xml_CONFIG-FILE");
+        mapHbase.put("hbase.rootdir", "hdfs://" + namenodeServer + ":8020/apps/hbase/data");
         conf.put("hbase.config", mapHbase);
 
         builder.setBolt("message-reassembler",
