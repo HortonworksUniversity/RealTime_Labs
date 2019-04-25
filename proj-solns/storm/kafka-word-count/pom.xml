@@ -106,10 +106,10 @@
             <artifactId>storm-kafka</artifactId>
             <version>${storm.version}</version>
             <exclusions>
-            	<exclusion>
-            		<groupId>org.apache.kafka</groupId>
-            		<artifactId>kafka-clients</artifactId>
-            	</exclusion>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -176,6 +176,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

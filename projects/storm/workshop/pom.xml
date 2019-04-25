@@ -95,15 +95,17 @@
             </exclusions>
         </dependency>
 
+        <!-- 
         <dependency>
             <groupId>org.apache.storm</groupId>
             <artifactId>storm-hdfs</artifactId>
             <version>${storm.version}</version>
         </dependency>
+        -->
 
         <dependency>
             <groupId>org.apache.storm</groupId>
-            <artifactId>storm-kafka</artifactId>
+            <artifactId>storm-kafka-client</artifactId>
             <version>${storm.version}</version>
             <exclusions>
                 <exclusion>
@@ -176,6 +178,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>

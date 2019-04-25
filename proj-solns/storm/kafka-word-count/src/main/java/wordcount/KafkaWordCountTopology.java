@@ -5,26 +5,23 @@ import org.apache.storm.LocalCluster;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
-import org.apache.storm.kafka.*;
-import org.apache.storm.spout.SchemeAsMultiScheme;
+import org.apache.storm.kafka.spout.KafkaSpoutConfig;
+import org.apache.storm.kafka.spout.KafkaSpout;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
-import java.util.UUID;
 
 public class KafkaWordCountTopology {
 
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
-        BrokerHosts hosts = new ZkHosts("sandbox.hortonworks.com:2181");
+        String bootstrapServer = "replaceWith-INTERNAL-dns-of-ONE-broker-node";
 
-        SpoutConfig sc = new SpoutConfig(hosts,
-                "sentences", "/sentences",
-                UUID.randomUUID().toString());
-        sc.scheme = new SchemeAsMultiScheme(new StringScheme());
+        KafkaSpout spout = new KafkaSpout<>(KafkaSpoutConfig.builder(
+                bootstrapServer + ":6667",
+                "sentences").build());
 
-        KafkaSpout spout = new KafkaSpout(sc);
 
         builder.setSpout("kafka-spout", spout, 1);
 
