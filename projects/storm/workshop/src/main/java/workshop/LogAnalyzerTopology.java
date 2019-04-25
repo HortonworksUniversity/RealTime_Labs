@@ -8,14 +8,14 @@ import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.hbase.bolt.HBaseBolt;
 import org.apache.storm.hbase.bolt.mapper.SimpleHBaseMapper;
-import org.apache.storm.kafka.*;
+import org.apache.storm.kafka.spout.KafkaSpoutConfig;
+import org.apache.storm.kafka.spout.KafkaSpout;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class LogAnalyzerTopology {
 
@@ -28,7 +28,7 @@ public class LogAnalyzerTopology {
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "hdfs://sandbox.hortonworks.com:8020/apps/hbase/data");
+        mapHbase.put("hbase.rootdir", "REPLACE-WITH-VALUE-FROM_hbase-site.xml_CONFIG-FILE");
         conf.put("hbase.config", mapHbase);
 
 

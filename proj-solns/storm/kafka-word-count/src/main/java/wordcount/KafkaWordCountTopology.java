@@ -22,7 +22,6 @@ public class KafkaWordCountTopology {
                 bootstrapServer + ":6667",
                 "sentences").build());
 
-
         builder.setSpout("kafka-spout", spout, 1);
 
         builder.setBolt("splitter",

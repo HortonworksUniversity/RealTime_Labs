@@ -12,7 +12,7 @@ import org.apache.storm.tuple.Values;
 public class MessageTokenizerBolt extends BaseBasicBolt {
 
     public void execute(Tuple tuple, BasicOutputCollector basicOutputCollector) {
-        String[] logElements = StringUtils.split(tuple.getString(0), '\t');
+        String[] logElements = StringUtils.split(getStringByField("value"), '\t');
 
         //for our simple use case, ignore date and time although...
         String ipAddress      = logElements[2];

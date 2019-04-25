@@ -8,7 +8,8 @@ import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
 import org.apache.storm.hbase.bolt.HBaseBolt;
 import org.apache.storm.hbase.bolt.mapper.SimpleHBaseMapper;
-import org.apache.storm.kafka.*;
+import org.apache.storm.kafka.spout.KafkaSpoutConfig;
+import org.apache.storm.kafka.spout.KafkaSpout;
 import org.apache.storm.kafka.bolt.KafkaBolt;
 import org.apache.storm.kafka.bolt.mapper.FieldNameBasedTupleToKafkaMapper;
 import org.apache.storm.kafka.bolt.selector.DefaultTopicSelector;
@@ -19,21 +20,17 @@ import org.apache.storm.tuple.Fields;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 
 public class LogAnalyzerTopology {
 
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         TopologyBuilder builder = new TopologyBuilder();
 
-        BrokerHosts hosts = new ZkHosts("sandbox.hortonworks.com:2181");
+        String bootstrapServer = "replaceWith-INTERNAL-dns-of-ONE-broker-node";
 
-        SpoutConfig sc = new SpoutConfig(hosts,
-                "logs", "/logs",
-                UUID.randomUUID().toString());
-        sc.scheme = new SchemeAsMultiScheme(new StringScheme());
-
-        KafkaSpout spout = new KafkaSpout(sc);
+        KafkaSpout spout = new KafkaSpout<>(KafkaSpoutConfig.builder(
+                bootstrapServer + ":6667",
+                "logs").build());
 
         builder.setSpout("log-spout", spout, 1);
 
@@ -65,7 +62,7 @@ public class LogAnalyzerTopology {
 
 
         Map<String, Object> mapHbase = new HashMap<String, Object>();
-        mapHbase.put("hbase.rootdir", "hdfs://sandbox.hortonworks.com:8020/apps/hbase/data");
+        mapHbase.put("hbase.rootdir", "REPLACE-WITH-VALUE-FROM_hbase-site.xml_CONFIG-FILE");
         conf.put("hbase.config", mapHbase);
 
         builder.setBolt("message-reassembler",
@@ -74,7 +71,7 @@ public class LogAnalyzerTopology {
 
         //set producer properties.
         Properties props = new Properties();
-        props.put("bootstrap.servers", "sandbox.hortonworks.com:6667");
+        props.put("bootstrap.servers", bootstrapServer + ":6667");
         props.put("acks", "1");
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
