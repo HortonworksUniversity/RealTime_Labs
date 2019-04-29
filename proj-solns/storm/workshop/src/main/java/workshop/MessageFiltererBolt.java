@@ -2,7 +2,6 @@ package workshop;
 
 
 import org.apache.storm.shade.org.apache.commons.lang.ArrayUtils;
-import org.apache.storm.shade.org.apache.commons.lang.StringUtils;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
